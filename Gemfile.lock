@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    stackmint (0.0.1)
+    fields (0.0.1)
 
 GEM
   remote: https://rubygems.org/
@@ -101,8 +101,9 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord
+  activesupport
   bundler (~> 1.3)
+  fields!
   hobo_fields
   rake
   rspec
-  stackmint!
