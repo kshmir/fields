@@ -27,14 +27,19 @@ describe Fields::Schema do
       expect { subject.add_column(:users, :name, :string) }.to raise_error
     end
 
-    it "should not throw exception otherwise" do
-      subject.add_table(:users)
-      expect { subject.add_column(:users, :name, :string) }.not_to raise_error
-    end
+    context "the table exists and is valid" do
+      before :each do
+        table = subject.add_table(:users)
+        expect(table).to receive(:add_column).with(:name, :string, {})
+      end
 
-    it "should store the column inside the table schema" do
-      subject.add_table(:users)
-      subject.add_column(:users, :name, :string).should eq(:string)
+      it "should not throw exception otherwise" do
+        expect { subject.add_column(:users, :name, :string) }.not_to raise_error
+      end
+
+      it "should store the column inside the table schema" do
+        subject.add_column(:users, :name, :string)
+      end
     end
   end
 end

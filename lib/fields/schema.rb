@@ -1,5 +1,10 @@
+require 'fields/validations'
+require 'fields/schema/table'
+
 module Fields
   class Schema
+    include Fields::Validations
+
     def initialize opts = {}
       @tables = {}
     end
@@ -13,35 +18,13 @@ module Fields
       assert_symbol(:name, name)
       assert_symbol(:type, type)
       assert_not_nil(:table, @tables[table])
-      @tables[table][name] = type
+      table = @tables[table]
+      table.add_column(name, type, opts)
     end
 
     def add_table table
       validate_table(table)
-      @tables[table] = {}
-    end
-
-    private
-    def assert_not_nil(key, value)
-      if value.nil?
-        raise "Expected #{key} not to be nil"
-      end
-    end
-
-    def assert_symbol(key, value)
-      unless value.is_a?(Symbol)
-        raise "Expected #{key} to be a symbol"
-      end
-    end
-
-    def validate_table(table)
-      unless valid_table?(table)
-        raise "Invalid table, expected non-empty string or symbol for name"
-      end
-    end
-    def valid_table?(table)
-      ( table.is_a?(String) && !table.empty? ) ||
-        table.is_a?(Symbol)
+      @tables[table] = Table.new
     end
   end
 end
