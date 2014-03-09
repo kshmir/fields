@@ -14,13 +14,13 @@ module Fields
 
       attr_reader :table
 
-      def add_column(name, type, opts = {})
+      def add_column(name, type, *args, **kwargs)
         assert_symbol(:name, name)
         assert_symbol(:type, type)
         if @columns[name]
           raise ColumnAlreadyExistsError 
         else
-          @columns[name] = Schema::Column.new(name, type, opts)
+          @columns[name] = Schema::Column.new(name, type, *args, **kwargs)
         end
       end
 

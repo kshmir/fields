@@ -3,10 +3,10 @@ module Fields
     class Column
       include Fields::Validations
 
-      def initialize name, type, opts = {}
+      def initialize name, type, *args, **kwargs
         @name = name
         @type = type
-        @extra_params = opts
+        @extra_params = { args: args, kwargs: kwargs }
       end
 
       attr_reader :name, :type, :extra_params
