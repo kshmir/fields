@@ -1,6 +1,7 @@
 require 'fields/validations'
 require 'fields/schema/table'
 require 'fields/schema/column'
+require 'fields/schema/exceptions'
 
 module Fields
   class Schema

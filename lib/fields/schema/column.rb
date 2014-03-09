@@ -19,7 +19,7 @@ module Fields
           @extra_params == other.extra_params
       end
 
-      # alias_method :eql?, :==
+      alias_method :eql?, :==
     end
   end
 end

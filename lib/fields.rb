@@ -1,7 +1,6 @@
-require "fields/version"
-require "fields/schema"
-require "fields/comparer"
-
 module Fields
-  # Your code goes here...
+  require "fields/version"
+  require "fields/schema"
+  require "fields/comparer"
+  require "fields/extensions/active_record"
 end

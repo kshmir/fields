@@ -1,0 +1,2 @@
+class ColumnAlreadyExistsError < StandardError
+end
