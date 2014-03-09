@@ -20,3 +20,15 @@ def test_transitivity(objA, objB, objC)
   objA.should eq(objB)
   objB.should eq(objC)
 end
+
+require 'active_record'
+require 'fields'
+
+
+RSpec.configure do |config|
+  config.before(:all) do
+    ActiveRecord::Base.establish_connection({
+       adapter:  "nulldb"
+    })
+  end
+end

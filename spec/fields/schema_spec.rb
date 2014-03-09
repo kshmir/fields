@@ -1,4 +1,4 @@
-require 'fields'
+require 'spec_helper'
 
 describe Fields::Schema do
   context ".add_table" do

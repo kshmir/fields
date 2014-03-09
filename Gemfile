@@ -7,6 +7,7 @@ group :test do
   gem 'activesupport'
   gem 'hobo_fields'
   gem 'rspec'
+  gem 'activerecord-nulldb-adapter'
 end
 
 group :development, :test do
