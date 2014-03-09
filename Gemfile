@@ -9,3 +9,10 @@ group :test do
   gem 'rspec'
 end
 
+group :development, :test do
+  gem 'pry'
+  gem 'pry-rails'
+  gem 'pry-byebug'
+  gem 'pry-stack_explorer'
+  gem 'binding_of_caller'
+end
