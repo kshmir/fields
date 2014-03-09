@@ -1,5 +1,6 @@
 require 'fields/validations'
 require 'fields/schema/table'
+require 'fields/schema/column'
 
 module Fields
   class Schema
@@ -24,7 +25,7 @@ module Fields
 
     def add_table table
       validate_table(table)
-      @tables[table] = Table.new
+      @tables[table] = Table.new(table)
     end
   end
 end
