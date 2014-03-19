@@ -3,9 +3,12 @@ module Fields
     class Table
       include Fields::Validations
 
-      def initialize table
+      def self.from_schema
+      end
+
+      def initialize table, options = {}
         @table = table
-        @columns = {}
+        @columns = options[:columns] || {}
       end
 
       def columns
