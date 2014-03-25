@@ -10,7 +10,7 @@ module Fields
     include Fields::Validations
 
     def initialize opts = {}
-      @tables = {}
+      @tables = HashWithIndifferentAccess.new
     end
 
     def tables
