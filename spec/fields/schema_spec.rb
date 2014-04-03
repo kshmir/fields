@@ -18,7 +18,7 @@ describe Fields::Schema do
     end
     it "should store the table into the fields schema" do
       subject.add_table(:users)
-      subject.tables.keys.include?(:users).should be_true
+      subject.tables.keys.include?("users").should be_true
       subject.tables[:users].should_not be_nil
     end
   end

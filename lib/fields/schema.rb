@@ -3,6 +3,7 @@ require 'fields/schema/table'
 require 'fields/schema/column'
 require 'fields/schema/dsl'
 require 'fields/schema/converter'
+require 'fields/schema/differ'
 require 'fields/schema/exceptions'
 
 module Fields

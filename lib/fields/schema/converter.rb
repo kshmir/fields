@@ -1,8 +1,6 @@
 module Fields
   class Schema
     class Converter
-      include Fields::Validations
-
       def from obj
         if is_a_connection?(obj)
           obj = active_record_to_hash(obj)
@@ -11,6 +9,7 @@ module Fields
       end
 
       def to_migration schema
+        # TODO
       end
 
       private
