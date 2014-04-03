@@ -10,7 +10,7 @@ group :test do
   gem 'activerecord-nulldb-adapter'
 end
 
-group :development, :test do
+group :development do
   gem 'pry'
   gem 'pry-rails'
   gem 'pry-byebug'
