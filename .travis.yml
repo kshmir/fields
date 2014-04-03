@@ -4,4 +4,8 @@ rvm:
   - 2.0.0
   - 2.1.0
   - jruby-19mode
+install: bundle install --without development --deployment
+cache:
+  directories:
+    - vendor/bundle
 script: CODECLIMATE_REPO_TOKEN=c00911854a388bac2eb524e9b3efbf61a711206236539dbfcf9fbf5b3609a7d5 bundle exec rspec spec
