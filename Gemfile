@@ -8,6 +8,7 @@ group :test do
   gem 'hobo_fields'
   gem 'rspec'
   gem 'activerecord-nulldb-adapter'
+  gem "codeclimate-test-reporter", require: nil
 end
 
 group :development do
