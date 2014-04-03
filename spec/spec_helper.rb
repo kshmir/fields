@@ -1,3 +1,6 @@
+require "codeclimate-test-reporter"
+CodeClimate::TestReporter.start
+
 def test_equals(objA, objB, objC = nil)
   test_reflexivity(objA)
   test_reflexivity(objB)
@@ -23,8 +26,6 @@ end
 
 require 'active_record'
 require 'fields'
-require "codeclimate-test-reporter"
-CodeClimate::TestReporter.start
 
 RSpec.configure do |config|
   config.before(:all) do
