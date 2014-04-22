@@ -17,13 +17,13 @@ module Fields
 
       attr_reader :table
 
-      def add_column(name, type, *args, **kwargs)
+      def add_column(name, type, *args)
         assert_symbol(:name, name)
         assert_symbol(:type, type)
         if @columns[name]
           raise ColumnAlreadyExistsError 
         else
-          @columns[name] = Schema::Column.new(name, type, *args, **kwargs)
+          @columns[name] = Schema::Column.new(name, type, *args)
         end
       end
 
@@ -34,6 +34,13 @@ module Fields
               other.columns.keys.any? { |obj2| obj == obj2  }
           }) && 
           (self.columns.size == other.columns.size)
+      end
+
+      def to_hash
+        {
+          name: @table,
+          columns: columns.map(&:to_hash)
+        }
       end
 
       alias_method :eql?, :==

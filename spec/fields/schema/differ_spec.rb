@@ -7,34 +7,29 @@ module Fields
         @differ
       end
 
+      def build_schema &block
+        converter = Converter.new
+        silence_stream(STDOUT) do
+          ActiveRecord::Schema.define(&block)
+        end
+        connection = ActiveRecord::Base.connection
+        schema = converter.from(connection)
+      end
+
       subject :database_schema do
-        @database_schema ||= begin
-                      converter = Converter.new
-                      silence_stream(STDOUT) do
-                        ActiveRecord::Schema.define do
-                          create_table :authors do |t|
-                            t.string :name, :null => false
-                          end
-                        end
-                      end
-                      connection = ActiveRecord::Base.connection
-                      schema = converter.from(connection)
-                    end
+        @database_schema ||=  build_schema do
+          create_table :authors do |t|
+            t.string :name, :null => false
+          end
+        end
       end
 
       subject :model_schema do
-        @model_schema ||= begin
-                      converter = Converter.new
-                      silence_stream(STDOUT) do
-                        ActiveRecord::Schema.define do
-                          create_table :authors do |t|
-                            t.string :changed_name, :null => false
-                          end
-                        end
-                      end
-                      connection = ActiveRecord::Base.connection
-                      schema = converter.from(connection)
-                    end
+        @model_schema ||= build_schema do
+          create_table :authors do |t|
+            t.string :context, :null => false
+          end
+        end
       end
 
       before :each do
@@ -59,8 +54,39 @@ module Fields
             end
           end
           context "different schema" do
-            it "should return an Differ::Result object"
-            it "should allow diffing names"
+
+            before :each do
+              @differ = Differ.new database_schema, model_schema
+            end
+
+            it "should return an Differ::Result object" do
+              differ.compute.should be_a(Differ::Result)
+            end
+
+            context "diffing names" do
+              context "adding a new name" do
+                subject :model_schema do
+                  @model_schema ||= build_schema do
+                    create_table :authors do |t|
+                      t.string :name, :null => false
+                      t.string :title, :null => false
+                    end
+                  end
+                end
+                it "should return a result with a CreateColumnAction" do
+                  differ.compute.actions.size.should == 1
+                end
+              end
+
+              context "changing a name" do
+                it "should return a result with a ChooseAction"
+              end
+
+              context "deleting a name" do
+                it "should return a result with a DeleteColumnAction"
+              end
+            end
+
             it "should allow diffing types"
             it "should allow diffing options"
           end
