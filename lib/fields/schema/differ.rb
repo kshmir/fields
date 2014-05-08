@@ -3,10 +3,13 @@ module Fields
     class Differ
       class EMPTY; end
       Result = Struct.new(:actions)
+      Action = Struct.new(:action, :type)
 
       def initialize source, target
         @source_schema = source
         @target_schema = target
+        @source_tables = source.tables
+        @target_tables = target.tables
       end
 
       attr_accessor :source_schema, :target_schema
@@ -19,38 +22,44 @@ module Fields
 
       private
       def diff_schemas
-        all_tables = (@source_schema.tables.keys + @target_schema.tables.keys).uniq
-        all_tables.each do |k|
-          source = @source_schema.tables[k]
-          target = @target_schema.tables[k]
-          
-          compare_table(source, target) &&
-            compare_columns(source.columns, target.columns)    
+        actions = []
+        stack = [ 
+          [:table, :columns],
+          [:column, :extra_params],
+          [:value]
+        ]
+
+        compare_stack stack, actions, @source_tables, @target_tables
+      end
+
+      def compare_stack stack, actions, source_hash = nil, target_hash = nil
+        values = stack.pop
+        all_keys = (source_hash.keys + target_hash.keys).uniq
+        all_keys.each do |k|
+          source = source_hash[k]
+          target = target_hash[k]
+
+          result = compare_entity(values[0], actions, source, target)
+          method = values[1]
+
+          if result && method
+            compare_stack(stack, actions, source, target)
+          end
         end
-        nil
+        actions
       end
 
-      def compare_columns source_columns, target_columns
-        all_columns = (source_columns.keys + target_columns.keys).uniq
-        all_columns.each do |k|
-          source = source_columns[k]
-          target = target_columns[k]
-          compare_column(source, target)
-        end
-      end
-
-      def compare_column source, target
-      end
-
-      def compare_table source, target
+      def compare_entity type, actions, source, target
         if !source && target
+          actions << Action.new(:new, type)
           # New Table
-          false
         elsif source && !target
           # Removed Table
-          false
+        elsif source != target
+          actions << nil
+          # Changed value
         else
-          true
+          # No change
         end
       end
     end

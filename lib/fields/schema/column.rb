@@ -3,10 +3,13 @@ module Fields
     class Column
       include Fields::Validations
 
-      def initialize name, type, *args
+      def initialize name, type, args = {}
         @name = name
         @type = type
         @extra_params = args
+
+        # Makes comparing params much easier
+        @extra_params[:type] = @type
       end
 
       attr_reader :name, :type, :extra_params

@@ -74,7 +74,8 @@ module Fields
                   end
                 end
                 it "should return a result with a CreateColumnAction" do
-                  # differ.compute.actions.size.should == 1
+                  differ.compute.actions.size.should == 1
+                  differ.compute.actions.first.should == Differ::Action.new(:new, :column)
                 end
               end
 
