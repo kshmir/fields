@@ -17,9 +17,11 @@ module Fields
       def == other
         return false unless other.is_a?(Column)
 
-        @name == other.name &&
-          @type == other.type &&
-          @extra_params == other.extra_params
+        @name == other.name && @type == other.type
+      end
+
+      def to_hash
+        @extra_params
       end
 
       alias_method :eql?, :==

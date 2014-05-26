@@ -15,6 +15,10 @@ module Fields
         @columns.clone
       end
 
+      def column_names
+        self.columns.keys
+      end
+
       attr_reader :table
 
       def add_column(name, type, *args)
@@ -29,18 +33,11 @@ module Fields
 
       def == other
         return false unless other.is_a?(Table)
-        @table == other.table &&
-          (self.columns.keys.all? { |obj| 
-              other.columns.keys.any? { |obj2| obj == obj2  }
-          }) && 
-          (self.columns.size == other.columns.size)
+        @table == other.table
       end
 
       def to_hash
-        {
-          name: @table,
-          columns: columns.map(&:to_hash)
-        }
+        columns
       end
 
       alias_method :eql?, :==

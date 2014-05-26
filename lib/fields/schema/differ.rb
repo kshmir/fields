@@ -3,7 +3,7 @@ module Fields
     class Differ
       class EMPTY; end
       Result = Struct.new(:actions)
-      Action = Struct.new(:action, :type)
+      Action = Struct.new(:action, :type, :value)
 
       def initialize source, target
         @source_schema = source
@@ -33,17 +33,18 @@ module Fields
       end
 
       def compare_stack stack, actions, source_hash = nil, target_hash = nil
-        values = stack.pop
+        values = stack.shift
         all_keys = (source_hash.keys + target_hash.keys).uniq
         all_keys.each do |k|
           source = source_hash[k]
           target = target_hash[k]
 
-          result = compare_entity(values[0], actions, source, target)
+          result = compare_entity(values[0], actions, source, target) 
+          
           method = values[1]
 
-          if result && method
-            compare_stack(stack, actions, source, target)
+          if result && method && source && target && source.respond_to?(:to_hash) && target.respond_to?(:to_hash)
+            compare_stack(stack.clone, actions, source.to_hash, target.to_hash)
           end
         end
         actions
@@ -51,15 +52,14 @@ module Fields
 
       def compare_entity type, actions, source, target
         if !source && target
-          actions << Action.new(:new, type)
+          actions << Action.new(:new, type, target)
           # New Table
         elsif source && !target
           # Removed Table
         elsif source != target
-          actions << nil
           # Changed value
         else
-          # No change
+          true
         end
       end
     end
