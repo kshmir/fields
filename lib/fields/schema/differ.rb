@@ -39,7 +39,7 @@ module Fields
           source = source_hash[k]
           target = target_hash[k]
 
-          result = compare_entity(values[0], actions, source, target) 
+          result = compare_entity(values[0], actions, source, target, all_keys.size == target_hash.keys.size) 
           
           method = values[1]
 
@@ -50,16 +50,21 @@ module Fields
         actions
       end
 
-      def compare_entity type, actions, source, target
-        if !source && target
-          actions << Action.new(:new, type, target)
-          # New Table
-        elsif source && !target
-          # Removed Table
-        elsif source != target
-          # Changed value
+      def compare_entity type, actions, source, target, same_size
+        if same_size
+          if !source && target
+            actions << Action.new(:new, type, target)
+          elsif source && !target
+            actions << Action.new(:deleted, type, source)
+          else
+            true
+          end
         else
-          true
+          if !source && target
+            actions << Action.new(:choose, type, target)
+          else
+            true
+          end
         end
       end
     end

@@ -85,7 +85,22 @@ module Fields
               end
 
               context "changing a name" do
-                it "should return a result with a ChooseAction"
+                subject :model_schema do
+                  @model_schema ||= build_schema do
+                    create_table :authors do |t|
+                      t.string :my_name, :null => false
+                    end
+                  end
+                end
+                it "should return a result with a ChooseAction" do
+                  differ.compute.actions.size.should == 1
+
+                  action       = differ.compute.actions.first
+                  other_action = Differ::Action.new(:choose, :column)
+
+                  action.type.should   == other_action.type
+                  action.action.should == other_action.action
+                end
               end
 
               context "deleting a name" do
