@@ -3,6 +3,7 @@ module Fields
     class Differ
       class EMPTY; end
       Result = Struct.new(:actions)
+      Result = Struct.new(:actions)
       Action = Struct.new(:action, :type, :value)
 
       def initialize source, target
@@ -50,17 +51,17 @@ module Fields
         actions
       end
 
-      def compare_entity type, actions, source, target, same_size
-        if same_size
+      def compare_entity type, actions, source, target, all_repeated_options
+        if all_repeated_options
           if !source && target
             actions << Action.new(:new, type, target)
           elsif source && !target
-            actions << Action.new(:deleted, type, source)
+            actions << Action.new(:choose, type, source)
           else
             true
           end
         else
-          if !source && target
+          if source && !target
             actions << Action.new(:choose, type, target)
           else
             true
