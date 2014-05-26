@@ -16,7 +16,6 @@ module Fields
 
       def == other
         return false unless other.is_a?(Column)
-
         @name == other.name && @type == other.type
       end
 
